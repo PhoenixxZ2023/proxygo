@@ -4,7 +4,7 @@
 set -e
 
 INSTALL_DIR="$HOME/DragonX"
-REPO_URL="https://git.dr2.site/penguinehis/DragonX-SSH-Proxy.git"
+REPO_URL="https:/https://github.com/PhoenixxZ2023/main/proxygo.git"
 
 echo "Installing DragonX into $INSTALL_DIR..."
 
