@@ -1,46 +1,42 @@
-Markdown
-# 🐉 DragonX – Proxy Rápido com Suporte Multi-Cliente
+# 🐉 DRAGONX – PROXY RÁPIDO COM SUPORTE MULTI-CLIENTE
 
-========================================
-## 📦 Instalação
-========================================
+---
 
-### Passo a Passo
+## 📦 INSTALAÇÃO
 
-1. **Pular o 200OK**
+### PASSO A PASSO
+
+1. **PULAR O 200OK**  
    Se você deseja **PULAR** o `200OK`, use isto em sua payload:
-   `x-skip: 200`
+   ```txt
+   x-skip: 200
+COMPATIBILIDADE NAPSTER V (NPV)
+Adicione isto ao FINAL da payload para corrigir a compatibilidade com o App:
 
-2. **Compatibilidade Napster V (NPV)**
-   Adicione isto ao **FINAL** da payload para corrigir a compatibilidade com o App:
-   `npv-x: ok[lf][lf]`
+npv-x: ok[lf][lf]
+SCRIPT DE INSTALAÇÃO
+Execute o comando abaixo no seu terminal:
 
-3. **Script de Instalação**
-   Execute o comando abaixo no seu terminal:
-   ```bash
-   bash <(wget -qO- [https://raw.githubusercontent.com/PhoenixxZ2023/proxygo/main/install.sh](https://raw.githubusercontent.com/PhoenixxZ2023/proxygo/main/install.sh))
-Abrir o Menu Para abrir o menu de gerenciamento do DragonX, digite:
+````
+bash <(wget -qO- https://raw.githubusercontent.com/PhoenixxZ2023/proxygo/main/install.sh)
+````
 
-Bash
+ABRIR O MENU
+Para abrir o menu de gerenciamento do DragonX, digite:
+````
 dragonx
-========================================
+````
 
-✅ Recursos
-========================================
+✅ RECURSOS
+Suporte multi-cliente: permite múltiplas conexões simultâneas.
 
-Suporte Multi-cliente: Permite múltiplas conexões simultâneas.
+Compatibilidade NPV: otimizado para o aplicativo Napster V.
 
-Compatibilidade NPV: Otimizado para o aplicativo Napster V.
+Instalação simplificada: processo automatizado e menu interativo.
 
-Instalação Simplificada: Processo automatizado e menu interativo.
-
-========================================
-
-🙌 Créditos
-========================================
-
+🙌 CRÉDITOS
 Scripts Shell: Beto — Telegram: @betovip
 
 Proxy: SisuDatu — Telegram: @sisudragon
 
-Integração DragonX: Contribuidores da comunidade.
+Integração DragonX: Contribuidores da comunidade
