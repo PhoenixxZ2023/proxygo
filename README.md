@@ -1,57 +1,46 @@
-🐉 DragonX – Fast Multi-Client Proxy
-🐉 DragonX – Proxy Rápido com Suporte Multi-Cliente
+Markdown
+# 🐉 DragonX – Proxy Rápido com Suporte Multi-Cliente
 
 ========================================
-📦 Installation / Instalação
+## 📦 Instalação
 ========================================
 
-[EN] Step-by-Step
-1) If you want to SKIP `200OK` use this on your payload:
-   ```x-skip: 200```
+### Passo a Passo
 
-2) Add this at the END of the payload to fix compatibility with the Napster V (NPV) App:
-  ```npv-x: ok[lf][lf]```
+1. **Pular o 200OK**
+   Se você deseja **PULAR** o `200OK`, use isto em sua payload:
+   `x-skip: 200`
 
-3) Run the installation script:
-   ```wget -qO- https://git.dr2.site/penguinehis/DragonX-SSH-Proxy/raw/branch/main/install.sh | bash```
+2. **Compatibilidade Napster V (NPV)**
+   Adicione isto ao **FINAL** da payload para corrigir a compatibilidade com o App:
+   `npv-x: ok[lf][lf]`
 
-4) To open the DragonX menu, type:
-   dragonx
-   (then press Enter)
+3. **Script de Instalação**
+   Execute o comando abaixo no seu terminal:
+   ```bash
+   bash <(wget -qO- [https://raw.githubusercontent.com/PhoenixxZ2023/proxygo/main/install.sh](https://raw.githubusercontent.com/PhoenixxZ2023/proxygo/main/install.sh))
+Abrir o Menu Para abrir o menu de gerenciamento do DragonX, digite:
 
+Bash
+dragonx
+========================================
 
-[PT-BR] Passo a Passo
-1) Se você deseja PULAR o `200OK` coloque isso na sua payload:
-   ```x-skip: 200```
+✅ Recursos
+========================================
 
-2) Adicione a linha ABAIXO no FINAL do payload para corrigir a compatibilidade com o App Napster V (NPV):
-   ```npv-x: ok[lf][lf]```
+Suporte Multi-cliente: Permite múltiplas conexões simultâneas.
 
-3) Execute o script de instalação:
-   ```bash <(wget -qO- https://raw.githubusercontent.com/PhoenixxZ2023/proxygo/main/install.sh) && xray-menu```
+Compatibilidade NPV: Otimizado para o aplicativo Napster V.
 
-4) Para abrir o menu do DragonX, digite:
-   dragonx
-   (e pressione Enter)
-
+Instalação Simplificada: Processo automatizado e menu interativo.
 
 ========================================
-✅ Features / Recursos
-========================================
-[EN]
-- Multi-client support
-- NPV App compatibility
-- Simple installation and configuration
 
-[PT-BR]
-- Suporte multi-cliente
-- Compatível com o App NPV
-- Instalação e configuração simples
-
-
+🙌 Créditos
 ========================================
-🙌 Credits / Créditos
-========================================
-- Shell scripts: Beto — Telegram: @betovip
-- Proxy: SisuDatu — Telegram: @sisudragon
-- Project packaging & DragonX integration / Empacotamento do projeto e integração DragonX: Community contributors / Contribuidores da comunidade
+
+Scripts Shell: Beto — Telegram: @betovip
+
+Proxy: SisuDatu — Telegram: @sisudragon
+
+Integração DragonX: Contribuidores da comunidade.
