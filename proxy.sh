@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# DragonX Manager - systemd + full menu
-# Multi-port support
-# Original author: Danilo (refactored for DragonX)
+# DragonX Manager - systemd + menu completo
+# Suporte multi-porta
+# Autor original: Danilo (refatorado para DragonX)
+
+set -e
 
 PROXY_DIR="$HOME/DragonX"
 SERVICE_PREFIX="dragonx_port"
@@ -11,7 +13,28 @@ PORTS_FILE="$PROXY_DIR/ports.list"
 mkdir -p "$LOG_DIR"
 mkdir -p "$PROXY_DIR"
 
-# Detect architecture automatically
+# ---- CORES / ESTILO ----
+BLUE_BOLD='\033[1;34m'
+RESET='\033[0m'
+
+# texto do menu em AZUL + NEGRITO + MAIÚSCULO
+menu_txt() {
+  local s="$*"
+  printf "%b%s%b\n" "${BLUE_BOLD}" "${s^^}" "${RESET}"
+}
+
+# item do menu
+menu_item() {
+  local key="$1"; shift
+  menu_txt "[$key] $*"
+}
+
+# mensagem normal (sem uppercase)
+msg() {
+  printf "%b%s%b\n" "${BLUE_BOLD}" "$*" "${RESET}"
+}
+
+# Detecta arquitetura automaticamente
 ARCH=$(uname -m)
 case "$ARCH" in
   x86_64|i386|i686)
@@ -21,18 +44,18 @@ case "$ARCH" in
     BIN_NAME="dragon_go-ARM"
     ;;
   *)
-    echo "Unsupported architecture: $ARCH"
+    menu_txt "ARQUITETURA NÃO SUPORTADA: $ARCH"
     exit 1
     ;;
 esac
 
-# Function to create/update a systemd service
+# Cria/atualiza um serviço systemd
 update_service() {
-    local PORT=$1
-    local SERVICE_NAME="${SERVICE_PREFIX}_${PORT}.service"
-    sudo tee /etc/systemd/system/$SERVICE_NAME > /dev/null <<EOF
+  local PORT=$1
+  local SERVICE_NAME="${SERVICE_PREFIX}_${PORT}.service"
+  sudo tee /etc/systemd/system/$SERVICE_NAME > /dev/null <<EOF
 [Unit]
-Description=DragonX SSH Proxy (Port $PORT)
+Description=DragonX SSH Proxy (Porta $PORT)
 After=network.target
 
 [Service]
@@ -46,109 +69,111 @@ StandardError=file:$LOG_DIR/proxy_$PORT.log
 [Install]
 WantedBy=multi-user.target
 EOF
-    sudo systemctl daemon-reload
-    sudo systemctl enable $SERVICE_NAME
+  sudo systemctl daemon-reload
+  sudo systemctl enable $SERVICE_NAME
 }
 
-# Start a port
+# Inicia uma porta
 start_port() {
-    read -p "Enter proxy port (1-65535): " PORT
-    while ! [[ $PORT =~ ^[0-9]+$ ]] || (( PORT < 1 || PORT > 65535 )); do
-        echo "⚠️ Enter a valid port (1-65535)."
-        read -p "Enter proxy port: " PORT
-    done
+  read -p "DIGITE A PORTA DO PROXY (1-65535): " PORT
+  while ! [[ $PORT =~ ^[0-9]+$ ]] || (( PORT < 1 || PORT > 65535 )); do
+    menu_txt "⚠️ DIGITE UMA PORTA VÁLIDA (1-65535)."
+    read -p "DIGITE A PORTA DO PROXY: " PORT
+  done
 
-    if ! grep -q "^$PORT$" "$PORTS_FILE" 2>/dev/null; then
-        echo $PORT >> "$PORTS_FILE"
-    fi
+  if ! grep -q "^$PORT$" "$PORTS_FILE" 2>/dev/null; then
+    echo "$PORT" >> "$PORTS_FILE"
+  fi
 
-    update_service $PORT
-    sudo systemctl start "${SERVICE_PREFIX}_${PORT}.service"
-    echo "✅ DragonX started on port $PORT"
-    read -p "Press ENTER to return to the menu..."
+  update_service "$PORT"
+  sudo systemctl start "${SERVICE_PREFIX}_${PORT}.service"
+  menu_txt "✅ DRAGONX INICIADO NA PORTA $PORT"
+  read -p "PRESSIONE ENTER PARA VOLTAR AO MENU..."
 }
 
-# Stop a port
+# Para uma porta
 stop_port() {
-    read -p "Enter port to stop: " PORT
-    local SERVICE_NAME="${SERVICE_PREFIX}_${PORT}.service"
-    sudo systemctl stop "$SERVICE_NAME"
-    echo "🛑 DragonX stopped on port $PORT"
-    read -p "Press ENTER to return to the menu..."
+  read -p "DIGITE A PORTA PARA PARAR: " PORT
+  local SERVICE_NAME="${SERVICE_PREFIX}_${PORT}.service"
+  sudo systemctl stop "$SERVICE_NAME"
+  menu_txt "🛑 DRAGONX PARADO NA PORTA $PORT"
+  read -p "PRESSIONE ENTER PARA VOLTAR AO MENU..."
 }
 
-# Restart a port
+# Reinicia uma porta
 restart_port() {
-    read -p "Enter port to restart: " PORT
-    update_service $PORT
-    sudo systemctl restart "${SERVICE_PREFIX}_${PORT}.service"
-    echo "🔄 DragonX restarted on port $PORT"
-    read -p "Press ENTER to return to the menu..."
+  read -p "DIGITE A PORTA PARA REINICIAR: " PORT
+  update_service "$PORT"
+  sudo systemctl restart "${SERVICE_PREFIX}_${PORT}.service"
+  menu_txt "🔄 DRAGONX REINICIADO NA PORTA $PORT"
+  read -p "PRESSIONE ENTER PARA VOLTAR AO MENU..."
 }
 
-# Remove all configured ports and services
+# Remove todas as portas configuradas e serviços
 uninstall_dragonx() {
-    echo "❌ Removing DragonX..."
-    if [ -f "$PORTS_FILE" ]; then
-        while read -r PORT; do
-            sudo systemctl stop "${SERVICE_PREFIX}_${PORT}.service"
-            sudo systemctl disable "${SERVICE_PREFIX}_${PORT}.service"
-            sudo rm -f "/etc/systemd/system/${SERVICE_PREFIX}_${PORT}.service"
-        done < "$PORTS_FILE"
-        rm -f "$PORTS_FILE"
-    fi
-    sudo systemctl daemon-reload
-    rm -rf "$PROXY_DIR"
-    sudo rm -f /usr/local/bin/dragonx
-    echo "✅ DragonX removed successfully!"
-    exit 0
+  menu_txt "❌ REMOVENDO DRAGONX..."
+  if [ -f "$PORTS_FILE" ]; then
+    while read -r PORT; do
+      sudo systemctl stop "${SERVICE_PREFIX}_${PORT}.service" 2>/dev/null || true
+      sudo systemctl disable "${SERVICE_PREFIX}_${PORT}.service" 2>/dev/null || true
+      sudo rm -f "/etc/systemd/system/${SERVICE_PREFIX}_${PORT}.service"
+    done < "$PORTS_FILE"
+    rm -f "$PORTS_FILE"
+  fi
+  sudo systemctl daemon-reload
+  rm -rf "$PROXY_DIR"
+  sudo rm -f /usr/local/bin/dragonx
+  menu_txt "✅ DRAGONX REMOVIDO COM SUCESSO!"
+  exit 0
 }
 
-# Main menu
+# Menu principal
 menu() {
-    clear
-    echo "=============================="
-    echo "           DragonX"
-    echo "=============================="
+  clear
+  menu_txt "=============================="
+  menu_txt "           DRAGONX"
+  menu_txt "=============================="
 
-    if [ -f "$PORTS_FILE" ]; then
-        HAS_ACTIVE=0
-        echo "Active ports:"
-        while read -r PORT; do
-            local SERVICE_NAME="${SERVICE_PREFIX}_${PORT}.service"
-            if systemctl is-active --quiet "$SERVICE_NAME"; then
-                echo " - Port $PORT (🟢 Active)"
-                HAS_ACTIVE=1
-            fi
-        done < "$PORTS_FILE"
+  if [ -f "$PORTS_FILE" ]; then
+    HAS_ACTIVE=0
+    menu_txt "PORTAS ATIVAS:"
+    while read -r PORT; do
+      local SERVICE_NAME="${SERVICE_PREFIX}_${PORT}.service"
+      if systemctl is-active --quiet "$SERVICE_NAME"; then
+        # linha informativa (mantém legível)
+        msg " - PORTA $PORT (🟢 ATIVA)"
+        HAS_ACTIVE=1
+      fi
+    done < "$PORTS_FILE"
 
-        if [ $HAS_ACTIVE -eq 0 ]; then
-            echo "No active ports"
-        fi
-    else
-        echo "No active ports"
+    if [ $HAS_ACTIVE -eq 0 ]; then
+      menu_txt "NENHUMA PORTA ATIVA"
     fi
+  else
+    menu_txt "NENHUMA PORTA ATIVA"
+  fi
 
-    echo "------------------------------"
-    echo "1) Start DragonX (add port)"
-    echo "2) Stop DragonX (port)"
-    echo "3) Restart DragonX (port)"
-    echo "4) Uninstall DragonX"
-    echo "5) Exit"
-    echo "=============================="
-    read -p "Choose an option: " option
+  menu_txt "------------------------------"
+  menu_item 1 "INICIAR DRAGONX (ADICIONAR PORTA)"
+  menu_item 2 "PARAR DRAGONX (PORTA)"
+  menu_item 3 "REINICIAR DRAGONX (PORTA)"
+  menu_item 4 "DESINSTALAR DRAGONX"
+  menu_item 5 "SAIR"
+  menu_txt "=============================="
 
-    case $option in
-        1) start_port ;;
-        2) stop_port ;;
-        3) restart_port ;;
-        4) uninstall_dragonx ;;
-        5) exit 0 ;;
-        *) echo "Invalid option!"; sleep 1; menu ;;
-    esac
+  read -p "ESCOLHA UMA OPÇÃO: " option
+
+  case "$option" in
+    1) start_port ;;
+    2) stop_port ;;
+    3) restart_port ;;
+    4) uninstall_dragonx ;;
+    5) exit 0 ;;
+    *) menu_txt "OPÇÃO INVÁLIDA!"; sleep 1; menu ;;
+  esac
 }
 
-# Menu loop
+# Loop do menu
 while true; do
-    menu
+  menu
 done
