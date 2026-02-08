@@ -4,7 +4,7 @@
 set -e
 
 INSTALL_DIR="$HOME/DragonX"
-REPO_URL="https://github.com/PhoenixxZ2023/main/proxygo.git"
+REPO_URL="https://github.com/PhoenixxZ2023/proxygo.git"
 
 # ---- CORES / ESTILO (MENU/TÍTULOS) ----
 BLUE_BOLD='\033[1;34m'
