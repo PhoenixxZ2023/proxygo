@@ -13,8 +13,9 @@
 COMPATIBILIDADE NAPSTER V (NPV)
 Adicione isto ao FINAL da payload para corrigir a compatibilidade com o App:
 
+````
 npv-x: ok[lf][lf]
-
+````
 
 ## SCRIPT DE INSTALAÇÃO
 Execute o comando abaixo no seu terminal:
