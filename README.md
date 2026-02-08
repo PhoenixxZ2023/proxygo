@@ -28,7 +28,7 @@
    ```npv-x: ok[lf][lf]```
 
 3) Execute o script de instalação:
-   ```wget -qO- https://github.com/PhoenixxZ2023/proxygo/raw/branch/main/install.sh | bash```
+   ```wget -qO- https://github.com/PhoenixxZ2023/proxygo/main/install.sh | bash```
 
 4) Para abrir o menu do DragonX, digite:
    dragonx
